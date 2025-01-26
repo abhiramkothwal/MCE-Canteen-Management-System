@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu - College Canteen</title>
+    <style>
+        /* Reset some default browser styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Basic styles for layout */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+        }
+
+        .header {
+            background-color: #333;
+            color: #333;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        .header .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 1.8em;
+        }
+
+        .header nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header nav ul li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        .header nav ul li a {
+            color: black;
+            text-decoration: none;
+            font-size: 1.2em;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .header nav ul li a:hover {
+            background-color: #555;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 20px auto; /* Adjust margin for spacing */
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .menu-item {
+            display: flex;
+            justify-content: space-between; /* Adjust spacing */
+            align-items: center;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px); /* Move the item up slightly on hover */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Enhance shadow on hover */
+        }
+
+        .menu-item img {
+            max-width: 150px; /* Adjust size as needed */
+            margin-right: 20px; /* Space between image and text */
+            border-radius: 5px; /* Rounded corners */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Shadow for image */
+            transition: transform 0.3s ease;
+        }
+
+        .menu-item:hover img {
+            transform: scale(1.1); /* Scale up the image on hover */
+        }
+
+        .menu-item-info {
+            flex: 1; /* Take remaining space */
+        }
+
+        .menu-item h2 {
+            margin-bottom: 10px;
+            transition: color 0.3s ease;
+        }
+
+        .menu-item:hover h2 {
+            color: #555; /* Change text color on hover */
+        }
+
+        .menu-item p {
+            margin-bottom: 10px;
+            transition: color 0.3s ease;
+        }
+
+        .menu-item:hover p {
+            color: #777; /* Dim text color on hover */
+        }
+
+        .add-to-cart{
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            cursor: pointer; /* Change cursor to pointer on hoverable elements */
+        }
+
+        .remove-from-cart{
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            cursor: pointer; /* Change cursor to pointer on hoverable elements */
+        }
+
+        .place-order button {
+            background-color: blue;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            cursor: pointer; /* Change cursor to pointer on hoverable elements */
+        }
+
+        .add-to-cart:hover, .remove-from-cart:hover, .place-order button:hover {
+            transform: scale(1.05); /* Scale up the button slightly on hover */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add subtle shadow on hover */
+        }
+
+        .place-order {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .cart-info {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .cart-info h2 {
+            margin-bottom: 10px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .cart-item p {
+            margin: 0;
+        }
+
+        footer {
+            background: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>MCE Canteen</h1>
+            <nav>
+                <ul>
+                    <li><a href="home.html">Home</a></li>
+                    <li><a href="menu.html">Menu</a></li>
+                    <li><a href="about-us.html">About Us</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="admin.html">Admin</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>Menu</h1>
+
+        <div class="menu-item">
+            <img src="pulao.jpg" alt="Pulao">
+            <div class="menu-item-info">
+                <h2>Pulao</h2>
+                <p>A delicious rice item filled with masala and vegetables</p>
+                <p>Price: Rs.40</p>
+            </div>
+            <button class="add-to-cart" onclick="addToCart('pulao', 40)">Add to Cart</button>
+            <button class="remove-from-cart" onclick="removeFromCart('pulao', 40)">Remove</button>
+        </div>
+
+        <div class="menu-item">
+            <img src="idli.jpg" alt="Idli Vada">
+            <div class="menu-item-info">
+                <h2>Idli Vada</h2>
+                <p>A delicious south Indian delicacy</p>
+                <p>Price: Rs.50</p>
+            </div>
+            <button class="add-to-cart" onclick="addToCart('idli', 50)">Add to Cart</button>
+            <button class="remove-from-cart" onclick="removeFromCart('idli', 50)">Remove</button>
+        </div>
+
+        <div class="menu-item">
+            <img src="meals.jpg" alt="Meals">
+            <div class="menu-item-info">
+                <h2>Meals</h2>
+                <p>Eat it and sleep</p>
+                <p>Price: Rs.70</p>
+            </div>
+            <button class="add-to-cart" onclick="addToCart('meals', 70)">Add to Cart</button>
+            <button class="remove-from-cart" onclick="removeFromCart('meals', 70)">Remove</button>
+        </div>
+
+        <div class="menu-item">
+            <img src="samosa.jpg" alt="Samosa">
+            <div class="menu-item-info">
+                <h2>Samosa</h2>
+                <p>A delicious patty with potato filling</p>
+                <p>Price: Rs.25</p>
+            </div>
+            <button class="add-to-cart" onclick="addToCart('samosa', 25)">Add to Cart</button>
+            <button class="remove-from-cart" onclick="removeFromCart('samosa', 25)">Remove</button>
+        </div>
+
+        <div class="menu-item">
+            <img src="tea.jpg" alt="Tea/Coffee">
+            <div class="menu-item-info">
+                <h2>Tea/Coffee</h2>
+                <p>Slurp it, Enjoy it</p>
+                <p>Price: Rs.15</p>
+            </div>
+            <button class="add-to-cart" onclick="addToCart('tea', 15)">Add to Cart</button>
+            <button class="remove-from-cart" onclick="removeFromCart('tea', 15)">Remove</button>
+        </div>
+
+        <div class="place-order">
+            <button onclick="showCart()">Place Order</button>
+        </div>
+
+        <div class="cart-info" id="cart-info" style="display: none;">
+            <h2>Cart Summary</h2>
+            <div id="cart-items"></div>
+            <p id="total-price"></p>
+        </div>
+    </div>
+
+    <script>
+        let cart = {
+            pulao: { quantity: 0, price: 40 },
+            idli: { quantity: 0, price: 50 },
+            meals: { quantity: 0, price: 70 },
+            samosa: { quantity: 0, price: 25 },
+            tea: { quantity: 0, price: 15 }
+        };
+
+        function addToCart(item, price) {
+            cart[item].quantity++;
+            updateCartDisplay();
+        }
+
+        function removeFromCart(item, price) {
+            if (cart[item].quantity > 0) {
+                cart[item].quantity--;
+                updateCartDisplay();
+            }
+        }
+
+        function updateCartDisplay() {
+            let cartItemsDiv = document.getElementById('cart-items');
+            let totalPrice = 0;
+            cartItemsDiv.innerHTML = ''; // Clear previous items
+
+            for (let item in cart) {
+                if (cart[item].quantity > 0) {
+                    let cartItemDiv = document.createElement('div');
+                    cartItemDiv.classList.add('cart-item');
+                    cartItemDiv.innerHTML = `<p>${item}: ${cart[item].quantity} (Rs.${cart[item].price})</p>`;
+                    cartItemsDiv.appendChild(cartItemDiv);
+                    totalPrice += cart[item].quantity * cart[item].price; // Calculate total price
+                }
+            }
+
+            document.getElementById('total-price').innerText = `Total Price: Rs.${totalPrice}`;
+            document.getElementById('cart-info').style.display = 'block'; // Show cart info
+        }
+
+        function showCart() {
+            let cartIsEmpty = true;
+            for (let item in cart) {
+                if (cart[item].quantity > 0) {
+                    cartIsEmpty = false;
+                    break;
+                }
+            }
+
+            if (cartIsEmpty) {
+                alert('Your cart is empty! Please add some items to the cart before placing an order.');
+                return;
+            }
+
+            let userName = prompt("Enter your name:");
+
+            if (userName) {
+                let orders = JSON.parse(localStorage.getItem('orders')) || [];
+                let order = {
+                    user: userName,
+                    items: {},
+                    totalPrice: 0
+                };
+
+                for (let item in cart) {
+                    if (cart[item].quantity > 0) {
+                        order.items[item] = cart[item];
+                        order.totalPrice += cart[item].quantity * cart[item].price;
+                    }
+                }
+
+                orders.push(order);
+                localStorage.setItem('orders', JSON.stringify(orders));
+                alert('Order placed successfully!');
+                // Clear cart after placing the order
+                cart = {
+                    pulao: { quantity: 0, price: 40 },
+                    idli: { quantity: 0, price: 50 },
+                    meals: { quantity: 0, price: 70 },
+                    samosa: { quantity: 0, price: 25 },
+                    tea: { quantity: 0, price: 15 }
+                };
+                updateCartDisplay(); // Update cart display to reflect cleared cart
+            } else {
+                alert('Order cancelled!');
+            }
+        }
+    </script>
+
+    <footer>
+        <p>&copy; 2024 College Canteen. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - College Canteen</title>
+    <style>
+        /* Reset some default browser styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Basic styles for layout */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+        }
+
+        .header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        .header .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 1.8em;
+        }
+
+        .header nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header nav ul li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        .header nav ul li a {
+            color: black;
+            text-decoration: none;
+            font-size: 1.2em;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .header nav ul li a:hover {
+            background-color: #555;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .menu-item img {
+            max-width: 150px;
+            margin-right: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .menu-item-info {
+            flex: 1;
+        }
+
+        .menu-item h2 {
+            margin-bottom: 10px;
+        }
+
+        .menu-item p {
+            margin-bottom: 10px;
+        }
+
+        .toggle-status {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .toggle-status.disabled {
+            background-color: red;
+        }
+
+        .toggle-status:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        footer {
+            background: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>Admin Panel - College Canteen</h1>
+            <nav>
+                <ul>
+                    <li><a href="admin.html">Admin Home</a></li>
+                    <li><a href="menu.html">Menu</a></li>
+                    <li><a href="orders.html">Orders</a></li>
+                    <li><a href="login.html">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>Manage Menu</h1>
+
+        <div class="menu-item" id="pulao-item">
+            <img src="pulao.jpg" alt="Pulao">
+            <div class="menu-item-info">
+                <h2>Pulao</h2>
+                <p>A delicious rice item filled with masala and vegetables</p>
+                <p>Price: Rs.40</p>
+            </div>
+            <button class="toggle-status" id="toggle-pulao" onclick="toggleItemStatus('pulao')">Disable</button>
+        </div>
+
+        <div class="menu-item" id="idli-item">
+            <img src="idli.jpg" alt="Idli Vada">
+            <div class="menu-item-info">
+                <h2>Idli Vada</h2>
+                <p>A delicious south Indian delicacy</p>
+                <p>Price: Rs.50</p>
+            </div>
+            <button class="toggle-status" id="toggle-idli" onclick="toggleItemStatus('idli')">Disable</button>
+        </div>
+
+        <div class="menu-item" id="meals-item">
+            <img src="meals.jpg" alt="Meals">
+            <div class="menu-item-info">
+                <h2>Meals</h2>
+                <p>Eat it and sleep</p>
+                <p>Price: Rs.70</p>
+            </div>
+            <button class="toggle-status" id="toggle-meals" onclick="toggleItemStatus('meals')">Disable</button>
+        </div>
+
+        <div class="menu-item" id="samosa-item">
+            <img src="samosa.jpg" alt="Samosa">
+            <div class="menu-item-info">
+                <h2>Samosa</h2>
+                <p>A delicious patty with potato filling</p>
+                <p>Price: Rs.25</p>
+            </div>
+            <button class="toggle-status" id="toggle-samosa" onclick="toggleItemStatus('samosa')">Disable</button>
+        </div>
+
+        <div class="menu-item" id="tea-item">
+            <img src="tea.jpg" alt="Tea/Coffee">
+            <div class="menu-item-info">
+                <h2>Tea/Coffee</h2>
+                <p>Slurp it, Enjoy it</p>
+                <p>Price: Rs.15</p>
+            </div>
+            <button class="toggle-status" id="toggle-tea" onclick="toggleItemStatus('tea')">Disable</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 College Canteen. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const menuStatus = {
+            pulao: true,
+            idli: true,
+            meals: true,
+            samosa: true,
+            tea: true
+        };
+
+        function toggleItemStatus(item) {
+            menuStatus[item] = !menuStatus[item];
+            const button = document.getElementById(`toggle-${item}`);
+            if (menuStatus[item]) {
+                button.classList.remove('disabled');
+                button.textContent = 'Disable';
+                enableMenuItem(item);
+            } else {
+                button.classList.add('disabled');
+                button.textContent = 'Enable';
+                disableMenuItem(item);
+            }
+        }
+
+        function disableMenuItem(item) {
+            const menuItem = document.getElementById(`${item}-item`);
+            menuItem.style.opacity = '0.5';
+            menuItem.querySelector('.add-to-cart').disabled = true;
+            menuItem.querySelector('.remove-from-cart').disabled = true;
+        }
+
+        function enableMenuItem(item) {
+            const menuItem = document.getElementById(`${item}-item`);
+            menuItem.style.opacity = '1';
+            menuItem.querySelector('.add-to-cart').disabled = false;
+            menuItem.querySelector('.remove-from-cart').disabled = false;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            for (let item in menuStatus) {
+                if (!menuStatus[item]) {
+                    disableMenuItem(item);
+                    document.getElementById(`toggle-${item}`).classList.add('disabled');
+                    document.getElementById(`toggle-${item}`).textContent = 'Enable';
+                }
+            }
+        });
+    </script>
+</body>
+</html>

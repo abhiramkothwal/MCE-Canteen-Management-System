@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Orders</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .clear-btn, .calculate-btn, .download-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .clear-btn {
+            background-color: #ff4444;
+        }
+
+        .calculate-btn {
+            background-color: #44c767;
+        }
+
+        .download-btn {
+            background-color: #007bff;
+        }
+    </style>
+    <!-- Include jsPDF library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Order List</h1>
+        <div id="order-list">
+            <table id="order-table">
+                <thead>
+                    <tr>
+                        <th>Order No</th>
+                        <th>User</th>
+                        <th>Items</th>
+                        <th>Total Price</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <button class="calculate-btn" onclick="calculateStats()">Total Sales</button>
+        <div id="stats"></div>
+        <div id="chart-container">
+            <canvas id="salesChart" width="300" height="100"></canvas>
+        </div>
+        <button class="download-btn" onclick="downloadPDF()" style="display: none;">Download PDF</button>
+    </div>
+
+    <script>
+        let salesChart; // Global variable for the Chart instance
+
+        function loadOrders() {
+            let orders = JSON.parse(localStorage.getItem('orders')) || [];
+            let orderTableBody = document.querySelector('#order-table tbody');
+            orderTableBody.innerHTML = '';
+
+            orders.forEach((order, index) => {
+                let itemsString = Object.keys(order.items).map(item => `${item} (x${order.items[item].quantity})`).join(' / ');
+                let totalOrderPrice = Object.keys(order.items).reduce((total, item) => total + order.items[item].quantity * order.items[item].price, 0);
+
+                let orderRow = document.createElement('tr');
+                orderRow.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${order.user}</td>
+                    <td>${itemsString}</td>
+                    <td>Rs.${totalOrderPrice}</td>
+                    <td><button class="clear-btn" onclick="clearOrder(${index})">Clear Order</button></td>
+                `;
+                orderTableBody.appendChild(orderRow);
+            });
+            updateTotalSales();
+        }
+
+        function clearOrder(index) {
+            let orders = JSON.parse(localStorage.getItem('orders')) || [];
+            orders.splice(index, 1);
+            localStorage.setItem('orders', JSON.stringify(orders));
+            loadOrders();
+        }
+
+        function updateTotalSales() {
+            let totalSales = parseFloat(localStorage.getItem('totalSales')) || 0;
+            let statsDiv = document.getElementById('stats');
+            statsDiv.innerHTML = `
+                <h2>Total Sales: Rs.${totalSales}</h2>
+            `;
+        }
+
+        function calculateStats() {
+            let orders = JSON.parse(localStorage.getItem('orders')) || [];
+            let totalProfit = 0;
+            let itemCounts = {};
+
+            orders.forEach(order => {
+                Object.keys(order.items).forEach(item => {
+                    totalProfit += order.items[item].quantity * order.items[item].price;
+
+                    if (itemCounts[item]) {
+                        itemCounts[item] += order.items[item].quantity;
+                    } else {
+                        itemCounts[item] = order.items[item].quantity;
+                    }
+                });
+            });
+
+            // Update total sales in local storage
+            localStorage.setItem('totalSales', totalProfit);
+            updateTotalSales();
+
+            let sortedItems = Object.keys(itemCounts).sort((a, b) => itemCounts[b] - itemCounts[a]);
+
+            let statsDiv = document.getElementById('stats');
+            statsDiv.innerHTML += `
+                <h2>Sales Order:</h2>
+                <ul>
+                    ${sortedItems.map(item => `<li>${item}: ${itemCounts[item]}</li>`).join('')}
+                </ul>
+                <h2>Highest Sold Item: ${sortedItems[0]} (${itemCounts[sortedItems[0]]})</h2>
+                <h2>Lowest Sold Item: ${sortedItems[sortedItems.length - 1]} (${itemCounts[sortedItems[sortedItems.length - 1]]})</h2>
+            `;
+
+            renderChart(sortedItems, itemCounts);
+            document.querySelector('.download-btn').style.display = 'block';
+        }
+
+        function renderChart(sortedItems, itemCounts) {
+            const ctx = document.getElementById('salesChart').getContext('2d');
+            if (salesChart) {
+                salesChart.destroy(); // Destroy the existing chart instance
+            }
+            salesChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: sortedItems,
+                    datasets: [{
+                        label: 'Number of Items Sold',
+                        data: sortedItems.map(item => itemCounts[item]),
+                        backgroundColor: 'rgba(255, 0, 0, 0.5)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function downloadPDF() {
+            const container = document.querySelector('.container');
+            const chartContainer = document.getElementById('chart-container');
+
+            html2canvas(container).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const imgWidth = 210;
+                const imgHeight = canvas.height * imgWidth / canvas.width;
+
+                pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+
+                html2canvas(chartContainer).then(chartCanvas => {
+                    const chartImgData = chartCanvas.toDataURL('image/png');
+                    const chartImgWidth = 210;
+                    const chartImgHeight = chartCanvas.height * chartImgWidth / chartCanvas.width;
+
+                    pdf.addPage();
+                    pdf.addImage(chartImgData, 'PNG', 0, 0, chartImgWidth, chartImgHeight);
+
+                    pdf.save('total_sales.pdf');
+                });
+            });
+        }
+
+        window.onload = function() {
+            loadOrders();
+            updateTotalSales();
+        };
+    </script>
+</body>
+</html>
